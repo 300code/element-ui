@@ -500,6 +500,8 @@ $--tab-header-color-hover: $--color-text-regular !default;
 $--tab-header-color: $--color-text-regular !default;
 $--tab-header-fill-active: rgba($--color-black, 0.06) !default;
 $--tab-header-fill-hover: rgba($--color-black, 0.06) !default;
+$--tab-header-border-left-color-active: $--border-color-light !default;
+$--tab-header-border-right-color-active: $--border-color-light !default; 
 $--tab-vertical-header-width: 90px !default;
 $--tab-vertical-header-count-color: $--color-white !default;
 $--tab-vertical-header-count-fill: $--color-text-secondary !default;

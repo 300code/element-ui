@@ -239,8 +239,8 @@
       &.is-active {
         color: $--color-primary;
         background-color: $--tab-header-fill-active;
-        border-right-color: $--border-color-base;
-        border-left-color: $--border-color-base;
+        border-right-color: $--tab-header-border-right-color-active;
+        border-left-color: $--tab-header-border-left-color-active;
       }
       &:not(.is-disabled):hover {
         background-color: $--tab-header-fill-hover;
