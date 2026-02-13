@@ -94,7 +94,7 @@
         color: $--menu-item-font-color;
 
         &:hover {
-          background-color: $--menu-item-hover-color-active;
+          background-color: $--menu-item-hover-color;
         }
       }
       & .el-submenu__icon-arrow {
@@ -107,7 +107,6 @@
     & .el-menu {
       & .el-menu-item,
       & .el-submenu__title {
-        background-color: $--menu-background-color;
         float: none;
         height: 36px;
         line-height: 36px;
@@ -187,6 +186,7 @@
     padding: 5px 0;
     border-radius: $--border-radius-small;
     box-shadow: $--box-shadow-light;
+    background-color: $--menu-background-color;
 
     &-bottom-start {
       margin-top: 5px;
