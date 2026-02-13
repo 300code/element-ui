@@ -256,6 +256,9 @@
       });
     },
     mounted() {
+      console.log('ElSubmenu component mounted'); 
+      console.log('hideArrow:', this.hideArrow); 
+      
       this.parentMenu.addSubmenu(this);
       this.rootMenu.addSubmenu(this);
       this.initPopper();
