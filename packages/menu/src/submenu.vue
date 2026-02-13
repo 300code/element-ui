@@ -278,8 +278,12 @@
         disabled,
         popperClass,
         $slots,
-        isFirstLevel
+        isFirstLevel,
+        hideArrow
       } = this;
+
+         console.log('hideArrow:', hideArrow, 
+              'mode:', rootMenu.mode );     
 
       const popupMenu = (
         <transition name={menuTransitionName}>
@@ -312,11 +316,15 @@
         </el-collapse-transition>
       );
 
-      const submenuTitleIcon = (
+      const submenuTitleIcon = hideArrow
+       ? null
+       :  (
         rootMenu.mode === 'horizontal' && isFirstLevel ||
         rootMenu.mode === 'vertical' && !rootMenu.collapse
-      ) ? 'el-icon-arrow-down' : 'el-icon-arrow-right';
+       ) ? 'el-icon-arrow-down' : 'el-icon-arrow-right';
 
+       console.log('hideArrow:', hideArrow );
+       
       return (
         <li
           class={{
@@ -341,9 +349,9 @@
             style={[paddingStyle, titleStyle, { backgroundColor }]}
           >
             {$slots.title}
-            { !this.hideArrow && (
+           { submenuTitleIcon &&
              <i class={['el-submenu__icon-arrow', submenuTitleIcon]}></i>
-            )}
+            }
           </div>
           {this.isMenuPopup ? popupMenu : inlineMenu}
         </li>
