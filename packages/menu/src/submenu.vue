@@ -255,10 +255,7 @@
         clearTimeout(this.timeout);
       });
     },
-    mounted() {
-      console.log('ElSubmenu component mounted'); 
-      console.log('hideArrow:', this.hideArrow); 
-      
+    mounted() { 
       this.parentMenu.addSubmenu(this);
       this.rootMenu.addSubmenu(this);
       this.initPopper();
@@ -284,10 +281,7 @@
         isFirstLevel,
         hideArrow
       } = this;
-
-         console.log('hideArrow:', hideArrow, 
-              'mode:', rootMenu.mode );     
-
+  
       const popupMenu = (
         <transition name={menuTransitionName}>
           <div
@@ -319,15 +313,12 @@
         </el-collapse-transition>
       );
 
-      const submenuTitleIcon = hideArrow
-       ? null
-       :  (
+      const submenuTitleIcon = (
         rootMenu.mode === 'horizontal' && isFirstLevel ||
         rootMenu.mode === 'vertical' && !rootMenu.collapse
-       ) ? 'el-icon-arrow-down' : 'el-icon-arrow-right';
+      ) ? 'el-icon-arrow-down' : 'el-icon-arrow-right';
 
-       console.log('hideArrow:', hideArrow );
-       
+        
       return (
         <li
           class={{
@@ -352,7 +343,7 @@
             style={[paddingStyle, titleStyle, { backgroundColor }]}
           >
             {$slots.title}
-           { submenuTitleIcon &&
+           { !hideArrow &&
              <i class={['el-submenu__icon-arrow', submenuTitleIcon]}></i>
             }
           </div>
