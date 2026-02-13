@@ -47,7 +47,9 @@
       popperAppendToBody: {
         type: Boolean,
         default: undefined
-      }
+      },
+      hideArrow: { type: Boolean, default: false }
+
     },
 
     data() {
@@ -339,7 +341,9 @@
             style={[paddingStyle, titleStyle, { backgroundColor }]}
           >
             {$slots.title}
-            <i class={[ 'el-submenu__icon-arrow', submenuTitleIcon ]}></i>
+            { !this.hideArrow && (
+             <i class={['el-submenu__icon-arrow', submenuTitleIcon]}></i>
+            )}
           </div>
           {this.isMenuPopup ? popupMenu : inlineMenu}
         </li>

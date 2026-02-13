@@ -112,7 +112,7 @@
       }
       & .el-menu-item.is-active,
       & .el-submenu.is-active > .el-submenu__title {
-        color: $--color-text-primary;
+        color: $--menu-item-active-color;
       }
     }
     & .el-menu-item:not(.is-disabled):hover,
@@ -121,8 +121,8 @@
       color: $--color-text-primary;
     }
     & > .el-menu-item.is-active {
-      border-bottom: 2px solid $--color-primary;
-      color: $--color-text-primary;
+      border-bottom: $--menu-item-border-active-width solid $--menu-item-border-active-color;
+      color: $--menu-item-active-color;
     }
   }
   @include m(collapse) {
