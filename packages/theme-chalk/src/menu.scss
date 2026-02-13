@@ -243,7 +243,8 @@
   }
   @include when(active) {
     .el-submenu__title {
-      border-bottom-color: $--color-primary;
+      border-bottom-color: $--menu-item-border-active-color;
+      background-color: $--menu-item-active-fill;
     }
   }
   @include when(opened) {

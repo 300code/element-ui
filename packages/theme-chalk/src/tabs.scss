@@ -238,13 +238,13 @@
 
       &.is-active {
         color: $--color-primary;
-        background-color: $--tab-header-fill-active;
-        border-right-color: $--tab-header-border-right-color-active;
-        border-left-color: $--tab-header-border-left-color-active;
+        background-color: $--tab-header-active-fill;
+        border-right-color: $--tab-header-border-right-active-color;
+        border-left-color: $--tab-header-border-left-active-color;
       }
       &:not(.is-disabled):hover {
-        background-color: $--tab-header-fill-hover;
-        color: $--tab-header-color-hover;
+        background-color: $--tab-header-hover-fill;
+        color: $--tab-header-hover-color;
       }
       &.is-disabled {
         color: $--disabled-color-base;

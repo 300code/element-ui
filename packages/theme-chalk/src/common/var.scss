@@ -495,13 +495,13 @@ $--group-title-width: 66px !default;
 -------------------------- */
 $--tab-font-size: $--font-size-base !default;
 $--tab-border-line: 1px solid #e4e4e4 !default;
-$--tab-header-color-active: $--color-text-secondary !default;
-$--tab-header-color-hover: $--color-text-regular !default;
+$--tab-header-active-color: $--color-text-secondary !default;
+$--tab-header-hover-color: $--color-text-regular !default;
 $--tab-header-color: $--color-text-regular !default;
-$--tab-header-fill-active: rgba($--color-black, 0.06) !default;
-$--tab-header-fill-hover: rgba($--color-black, 0.06) !default;
-$--tab-header-border-left-color-active: $--border-color-light !default;
-$--tab-header-border-right-color-active: $--border-color-light !default; 
+$--tab-header-active-fill: rgba($--color-black, 0.06) !default;
+$--tab-header-hover-fill: rgba($--color-black, 0.06) !default;
+$--tab-header-border-left-active-color: $--border-color-light !default;
+$--tab-header-border-right-active-color: $--border-color-light !default; 
 $--tab-vertical-header-width: 90px !default;
 $--tab-vertical-header-count-color: $--color-white !default;
 $--tab-vertical-header-count-fill: $--color-text-secondary !default;
@@ -788,8 +788,10 @@ $--menu-item-font-color: $--color-text-primary !default;
 $--menu-background-color: $--color-white !default;
 $--menu-item-hover-fill: $--color-primary-light-9 !default;
 $--menu-item-hover-color: $--link-color !default;
-$--menu-item-hover-color-active: $--color-white !default;
+$--menu-item-hover-active-color: $--color-white !default;
 $--menu-popup-background-color: $--background-color-base !default;
+$--menu-item-border-active-color: $--color-primary !default;
+$--menu-item-active-fill: $--color-white !default;
 
 /* Rate
 --------------------------*/
