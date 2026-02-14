@@ -81,8 +81,7 @@
 
   @include e(item) {
     list-style: none;
-    line-height: 36px;
-    padding: 0 20px;
+    padding: $--dropdown-item-padding-y $--dropdown-item-padding-x;
     margin: 0;
     font-size: $--font-size-base;
     color: $--color-text-regular;
