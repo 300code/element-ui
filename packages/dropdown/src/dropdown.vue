@@ -104,11 +104,16 @@
         // This ensures your w-80 div and activities are actually rendered
         instance.$slots.default = menuVNode.componentOptions.children;
 
+        instance.$vnode.data.staticClass = menuVNode.data.staticClass;
+        instance.$vnode.data.attrs = { 
+          ...instance.$vnode.data.attrs, 
+          ...menuVNode.data.attrs 
+        };
+
         // 3. NOW mount it
         instance.$mount();
 
         this.popperElm = instance.$el;
-        console.log('2. Mounted HTML Content:', instance.$el.innerHTML, this.popperElm );
         }
 
       this.$on('menu-item-click', this.handleMenuItemClick);
