@@ -103,16 +103,23 @@
         // 2. THE LOGIC: Manually push the children into the default slot
         // This ensures your w-80 div and activities are actually rendered
         instance.$slots.default = menuVNode.componentOptions.children;
-        console.log('instanceinstance', instance, instance.$el, instance.$slots.default , menuVNode.data);
+        console.log('instanceinstance', instance, instance.$el, instance.$slots.default , menuVNode);
        
         instance.$options.attrs = { ...menuVNode.data.attrs };
         instance.$vnode = menuVNode; 
 
-      console.log('after instanceinstance', instance );
-
+ 
 
         // 3. NOW mount it
-        instance.$mount();
+        instance.$mount();   
+        
+        const { staticClass, attrs } = menuVNode.data;
+        if (staticClass) instance.$el.className += ` ${staticClass}`;
+        if (attrs) {
+          Object.keys(attrs).forEach(key => instance.$el.setAttribute(key, attrs[key]));
+        }
+        console.log('after mount instanceinstance', instance, instance.$el );
+
 
         this.popperElm = instance.$el;
         }
