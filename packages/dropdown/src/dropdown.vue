@@ -103,12 +103,10 @@
         // 2. THE LOGIC: Manually push the children into the default slot
         // This ensures your w-80 div and activities are actually rendered
         instance.$slots.default = menuVNode.componentOptions.children;
-
-        instance.$options.staticClass = menuVNode.data.staticClass;
-        instance.$options.attrs = { 
-          ...instance.$options.attrs, 
-          ...menuVNode.data.attrs 
-        };
+        console.log('instanceinstance', instance, instance.$el, instance.$slots.default), menuVNode.data;
+       
+       instance.$vnode = menuVNode;
+       instance.$options.attrs = { ...menuVNode.data.attrs };
 
         // 3. NOW mount it
         instance.$mount();
