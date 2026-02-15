@@ -104,9 +104,9 @@
         // This ensures your w-80 div and activities are actually rendered
         instance.$slots.default = menuVNode.componentOptions.children;
 
-        instance.$vnode.data.staticClass = menuVNode.data.staticClass;
-        instance.$vnode.data.attrs = { 
-          ...instance.$vnode.data.attrs, 
+        instance.$options.staticClass = menuVNode.data.staticClass;
+        instance.$options.attrs = { 
+          ...instance.$options.attrs, 
           ...menuVNode.data.attrs 
         };
 
@@ -123,6 +123,11 @@
       visible(val) {
         this.broadcast('ElDropdownMenu', 'visible', val);
         this.$emit('visible-change', val);
+
+        if (this.$el) {
+        if (val) this.$el.classList.add('is-active')
+        else this.$el.classList.remove('is-active')
+    }
       },
       focusing(val) {
         const selfDefine = this.$el.querySelector('.el-dropdown-selfdefine');
