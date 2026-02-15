@@ -96,8 +96,10 @@
         const instance = new MenuCtor({
           propsData: menuVNode.componentOptions.propsData,
           parent: this,
-          children: menuVNode.componentOptions.children,
-          context: this.$vnode.context
+          context: this.$vnode.context,
+          slots: {
+            default: menuVNode.componentOptions.children
+          }
         }).$mount();
 
         this.popperElm = instance.$el;
