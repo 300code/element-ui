@@ -287,26 +287,27 @@
         const vnode = triggerElm[0]
         vnode.data = vnode.data || {}
         vnode.data.directives = vnode.data.directives || []
-        vnode.data.directives.push({ name: 'clickoutside', value: hide })
-        vnode.data.attrs = { ...vnode.data.attrs, 'aria-disabled': disabled }
+        // vnode.data.directives.push({ name: 'clickoutside', value: hide })
+        vnode.data.directives = [{ name: 'clickoutside', rawName: 'v-clickoutside', value: hide, expression: 'hide', def: Clickoutside}];
+        vnode.data.attrs = { ...vnode.data.attrs, 'aria-disabled': disabled, role: 'button' }
         
         const activeClasses = { 'is-active': this.visible }
         vnode.data.class = [vnode.data.class, activeClasses]
 
-        // vnode.children = vnode.children || []
-        // if (menuElm) {
-        //   vnode.children.push(menuElm)
-        // }
+        vnode.children = vnode.children || []
+        if (menuElm) {
+          vnode.children.push(menuElm)
+        }
 
-        // return vnode
-       const dropdownMenuVNode = menuElm ? menuElm : null;
+       return vnode
+      //  const dropdownMenuVNode = menuElm ? menuElm : null;
 
-       return (
-          <template>
-             {vnode}   
-            {dropdownMenuVNode}  
-        </template>
-        );
+      //  return (
+      //     <template>
+      //        {vnode}   
+      //       {dropdownMenuVNode}  
+      //   </template>
+      //   );
       } 
       
       return (
