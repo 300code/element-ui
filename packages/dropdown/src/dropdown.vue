@@ -249,6 +249,10 @@
         this.menuItems = this.dropdownElm.querySelectorAll("[tabindex='-1']");
         this.menuItemsArray = [].slice.call(this.menuItems);
 
+       console.log('menuElm:', this.dropdownElm);   
+       console.log('menuItemsArray:', this.menuItemsArray);  
+
+
         this.initEvent();
         this.initAria();
       }
@@ -294,20 +298,13 @@
         const activeClasses = { 'is-active': this.visible }
         vnode.data.class = [vnode.data.class, activeClasses]
 
-        vnode.children = vnode.children || []
-        if (menuElm) {
-          vnode.children.push(menuElm)
-        }
+        // vnode.children = vnode.children || []
+        // if (menuElm) {
+        //   vnode.children.push(menuElm)
+        // }
 
-       return vnode
-      //  const dropdownMenuVNode = menuElm ? menuElm : null;
-
-      //  return (
-      //     <template>
-      //        {vnode}   
-      //       {dropdownMenuVNode}  
-      //   </template>
-      //   );
+      //  return vnode 
+       return h('template', {}, [vnode, menuElm]); 
       } 
       
       return (
