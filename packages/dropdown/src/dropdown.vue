@@ -93,16 +93,22 @@
         
         // We manually create the menu. 
         // 'parent: this' makes the 'inject: [dropdown]' work!
+       // 1. Create the instance WITHOUT mounting yet
         const instance = new MenuCtor({
           propsData: menuVNode.componentOptions.propsData,
           parent: this,
-          context: this.$vnode.context,
-          slots: {
-            default: menuVNode.componentOptions.children
-          }
-        }).$mount();
+          context: this.$vnode.context
+        });
+
+        // 2. THE LOGIC: Manually push the children into the default slot
+        // This ensures your w-80 div and activities are actually rendered
+        instance.$slots.default = menuVNode.componentOptions.children;
+
+        // 3. NOW mount it
+        instance.$mount();
 
         this.popperElm = instance.$el;
+        console.log('2. Mounted HTML Content:', instance.$el.innerHTML, this.popperElm );
         }
 
       this.$on('menu-item-click', this.handleMenuItemClick);
