@@ -37,6 +37,7 @@
         default: ''
       },
       splitButton: Boolean,
+      raw: Boolean,
       hideOnClick: {
         type: Boolean,
         default: true
@@ -254,7 +255,7 @@
     },
 
     render(h) {
-      let { hide, splitButton, type, dropdownSize, disabled } = this;
+      let { hide, splitButton, type, dropdownSize, disabled, raw } = this;
 
       const handleMainButtonClick = (event) => {
         this.$emit('click', event);
@@ -280,8 +281,21 @@
           vnodeData.attrs = attrs;
         }
       }
-      const menuElm = disabled ? null : this.$slots.dropdown;
+      const menuElm = disabled ? null : this.$slots.dropdown;  
+      
+      if (this.raw) {
+        const vnode = triggerElm[0]
+        vnode.data = vnode.data || {}
+        vnode.data.directives = vnode.data.directives || []
+        vnode.data.directives.push({ name: 'clickoutside', value: hide })
+        vnode.data.attrs = { ...vnode.data.attrs, 'aria-disabled': disabled }
+        
+        const activeClasses = { 'is-active': this.visible }
+        vnode.data.class = [vnode.data.class, activeClasses]
 
+        return [vnode, menuElm]
+      } 
+      
       return (
         <div class="el-dropdown" v-clickoutside={hide} aria-disabled={disabled}>
           {triggerElm}
