@@ -87,6 +87,22 @@
     },
 
     mounted() {
+      if (this.raw && this.$slots.dropdown) {
+        const menuVNode = this.$slots.dropdown[0];
+        const MenuCtor = menuVNode.componentOptions.Ctor;
+        
+        // We manually create the menu. 
+        // 'parent: this' makes the 'inject: [dropdown]' work!
+        const instance = new MenuCtor({
+          propsData: menuVNode.componentOptions.propsData,
+          parent: this,
+          children: menuVNode.componentOptions.children,
+          context: this.$vnode.context
+        }).$mount();
+
+        this.popperElm = instance.$el;
+        }
+
       this.$on('menu-item-click', this.handleMenuItemClick);
     },
 
@@ -188,15 +204,10 @@
         ele.setAttribute('tabindex', '0'); // 下次期望的聚焦元素
       },
       removeTabindex() {
-         if (this.triggerElm) {
-           this.triggerElm.setAttribute('tabindex', '-1');
-         }
-        // this.triggerElm.setAttribute('tabindex', '-1');
-      if (this.menuItemsArray && this.menuItemsArray.length > 0) {
+        this.triggerElm.setAttribute('tabindex', '-1');
         this.menuItemsArray.forEach((item) => {
           item.setAttribute('tabindex', '-1');
         });
-      }
       },
       initAria() {
         this.dropdownElm.setAttribute('id', this.listId);
@@ -213,7 +224,8 @@
         let { trigger, show, hide, handleClick, splitButton, handleTriggerKeyDown, handleItemKeyDown } = this;
         this.triggerElm = splitButton
           ? this.$refs.trigger.$el
-          : this.$slots.default[0].elm;
+          // : this.$slots.default[0].elm;
+          : (this.raw ? this.$el : this.$slots.default[0].elm);
 
         let dropdownElm = this.dropdownElm;
 
@@ -253,7 +265,7 @@
         this.dropdownElm = this.popperElm;
         this.menuItems = this.dropdownElm.querySelectorAll("[tabindex='-1']");
         this.menuItemsArray = [].slice.call(this.menuItems);
- 
+
         this.initEvent();
         this.initAria();
       }
@@ -279,7 +291,6 @@
         </el-button-group>;
       } else {
         triggerElm = this.$slots.default;
-       console.log('triggerElm:',triggerElm  ); 
         const vnodeData = triggerElm[0].data || {};
         let { attrs = {} } = vnodeData;
         if (disabled && !attrs.disabled) {
@@ -290,7 +301,6 @@
       const menuElm = disabled ? null : this.$slots.dropdown;  
       
       if (this.raw) {
-        console.log('dropdownElm:',triggerElm , triggerElm[0]);
         const vnode = triggerElm[0]
         vnode.data = vnode.data || {}
         vnode.data.directives = vnode.data.directives || []
@@ -299,15 +309,9 @@
         vnode.data.attrs = { ...vnode.data.attrs, 'aria-disabled': disabled, role: 'button' }
         
         const activeClasses = { 'is-active': this.visible }
-        vnode.data.class = [vnode.data.class, activeClasses]
+        vnode.data.class = [vnode.data.class, activeClasses] 
 
-        vnode.children = vnode.children || []
-        if (menuElm) {
-          vnode.children.push(menuElm)
-        }
-        console.log('vnode:',vnode);
-
-       return vnode
+       return vnode 
       } 
       
       return (
