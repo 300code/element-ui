@@ -9,6 +9,7 @@
         :class="[
           type ? 'el-badge__content--' + type : null,
           {
+            'is-relative': isRelative && !$slots.default,
             'is-fixed': $slots.default,
             'is-dot': isDot
           }
@@ -27,6 +28,7 @@ export default {
     max: Number,
     isDot: Boolean,
     hidden: Boolean,
+    isRelative: Boolean,
     type: {
       type: String,
       validator(val) {
