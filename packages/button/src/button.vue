@@ -1,11 +1,11 @@
 <template>
   <button
-    class="el-button"
     @click="handleClick"
     :disabled="buttonDisabled || loading"
     :autofocus="autofocus"
     :type="nativeType"
     :class="[
+      isDropdownToggle ? 'el-dropdown-toggle' : 'el-button',
       type ? 'el-button--' + type : '',
       buttonSize ? 'el-button--' + buttonSize : '',
       {
@@ -54,6 +54,7 @@
       disabled: Boolean,
       plain: Boolean,
       autofocus: Boolean,
+      isDropdownToggle: Boolean,
       round: Boolean,
       circle: Boolean
     },

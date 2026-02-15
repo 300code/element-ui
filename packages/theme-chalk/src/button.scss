@@ -29,14 +29,15 @@
 
   &:hover,
   &:focus {
-    color: $--color-primary;
-    border-color: $--color-primary-light-7;
-    background-color: $--color-primary-light-9;
+    color: $--button-hover-color;
+    border-color: $--button-border-hover-color;
+    background-color: $--button-hover-fill;
   }
 
   &:active {
-    color: mix($--color-black, $--color-primary, $--button-active-shade-percent);
-    border-color: mix($--color-black, $--color-primary, $--button-active-shade-percent);
+    background: $--button-active-fill;
+    color: $--button-active-color;
+    border-color: $--button-border-active-color;
     outline: none;
   }
 
@@ -53,22 +54,23 @@
   @include when(plain) {
     &:hover,
     &:focus {
-      background: $--color-white;
+      background: $--button-hover-fill;
       border-color: $--color-primary;
       color: $--color-primary;
     }
 
     &:active {
-      background: $--color-white;
-      border-color: mix($--color-black, $--color-primary, $--button-active-shade-percent);
-      color: mix($--color-black, $--color-primary, $--button-active-shade-percent);
+      background: $--button-active-fill;
+      border-color: $--button-border-active-color;
+      color: $--button-active-color;
       outline: none;
     }
   }
 
   @include when(active) {
-    color: mix($--color-black, $--color-primary, $--button-active-shade-percent);
-    border-color: mix($--color-black, $--color-primary, $--button-active-shade-percent);
+    background: $--button-active-fill;
+    color: $--button-active-color;
+    border-color: $--button-border-active-color;
   }
 
   @include when(disabled) {
@@ -168,7 +170,7 @@
       background-color: transparent;
     }
     &:active {
-      color: mix($--color-black, $--color-primary, $--button-active-shade-percent);
+      color: $--button-active-color;
       border-color: transparent;
       background-color: transparent;
     }
@@ -179,6 +181,37 @@
       border-color: transparent;
     }
   }
+}
+
+@include b(dropdown-toggle) {
+    background: $--button-dropdown-toggle-background-color;
+    border: $--border-base;
+    border-color: $--button-dropdown-toggle-border-color;
+    color: $--button-dropdown-toggle-font-color;
+    line-height: 1;
+ 
+
+  &:hover,
+  &:focus {
+    color: $--button-dropdown-toggle-hover-color;
+    border-color: $--button-dropdown-toggle-border-hover-color;
+    background-color: $--button-dropdown-toggle-hover-fill;
+  }
+
+  &:active {
+    background: $--button-dropdown-toggle-active-fill;
+    color: $--button-dropdown-toggle-active-color;
+    border-color: $--button-dropdown-toggle-border-active-color;
+    outline: none;
+  }
+
+
+  @include when(active) {
+    background: $--button-dropdown-toggle-active-fill;
+    color: $--button-dropdown-toggle-active-color;
+    border-color: $--button-dropdown-toggle-border-active-color;
+  }
+ 
 }
 
 @include b(button-group) {

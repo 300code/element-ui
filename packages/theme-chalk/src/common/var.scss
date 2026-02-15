@@ -591,6 +591,28 @@ $--button-info-background-color: $--color-info !default;
 $--button-hover-tint-percent: 20% !default;
 $--button-active-shade-percent: 10% !default;
 
+/// hover||Font|3 
+$--button-hover-color: $--color-primary !default;
+$--button-active-color: mix($--color-black, $--color-primary, $--button-active-shade-percent) !default;
+$--button-border-active-color: mix($--color-black, $--color-primary, $--button-active-shade-percent) !default;
+$--button-active-fill: $--color-primary-light-9 !default;
+
+$--button-border-hover-color: $--color-primary-light-7 !default;
+$--button-hover-fill: $--color-primary-light-9 !default;
+
+
+$--button-dropdown-toggle-background-color: $--color-white !default;
+$--button-dropdown-toggle-active-fill: $--color-primary-light-9 !default;
+$--button-dropdown-toggle-hover-fill: $--color-primary-light-9 !default;
+
+$--button-dropdown-toggle-border-color: $--border-color-base !default;
+
+$--button-dropdown-toggle-hover-color: $--color-primary !default;
+$--button-dropdown-toggle-border-hover-color: $--color-primary-light-7 !default;
+
+$--button-dropdown-toggle-active-color: mix($--color-black, $--color-primary, $--button-active-shade-percent) !default;
+$--button-dropdown-toggle-border-active-color: mix($--color-black, $--color-primary, $--button-active-shade-percent) !default;
+ 
 
 /* cascader
 -------------------------- */
