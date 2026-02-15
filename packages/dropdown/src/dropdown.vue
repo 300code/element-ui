@@ -188,10 +188,15 @@
         ele.setAttribute('tabindex', '0'); // 下次期望的聚焦元素
       },
       removeTabindex() {
-        this.triggerElm.setAttribute('tabindex', '-1');
+         if (this.triggerElm) {
+           this.triggerElm.setAttribute('tabindex', '-1');
+         }
+        // this.triggerElm.setAttribute('tabindex', '-1');
+      if (this.menuItemsArray && this.menuItemsArray.length > 0) {
         this.menuItemsArray.forEach((item) => {
           item.setAttribute('tabindex', '-1');
         });
+      }
       },
       initAria() {
         this.dropdownElm.setAttribute('id', this.listId);
@@ -248,11 +253,7 @@
         this.dropdownElm = this.popperElm;
         this.menuItems = this.dropdownElm.querySelectorAll("[tabindex='-1']");
         this.menuItemsArray = [].slice.call(this.menuItems);
-
-       console.log('menuElm:', this.dropdownElm);   
-       console.log('menuItemsArray:', this.menuItemsArray);  
-
-
+ 
         this.initEvent();
         this.initAria();
       }
@@ -278,6 +279,7 @@
         </el-button-group>;
       } else {
         triggerElm = this.$slots.default;
+       console.log('triggerElm:',triggerElm  ); 
         const vnodeData = triggerElm[0].data || {};
         let { attrs = {} } = vnodeData;
         if (disabled && !attrs.disabled) {
@@ -288,6 +290,7 @@
       const menuElm = disabled ? null : this.$slots.dropdown;  
       
       if (this.raw) {
+        console.log('dropdownElm:',triggerElm , triggerElm[0]);
         const vnode = triggerElm[0]
         vnode.data = vnode.data || {}
         vnode.data.directives = vnode.data.directives || []
@@ -298,13 +301,13 @@
         const activeClasses = { 'is-active': this.visible }
         vnode.data.class = [vnode.data.class, activeClasses]
 
-        // vnode.children = vnode.children || []
-        // if (menuElm) {
-        //   vnode.children.push(menuElm)
-        // }
+        vnode.children = vnode.children || []
+        if (menuElm) {
+          vnode.children.push(menuElm)
+        }
+        console.log('vnode:',vnode);
 
-      //  return vnode 
-       return h('template', {}, [vnode, menuElm]); 
+       return vnode
       } 
       
       return (
