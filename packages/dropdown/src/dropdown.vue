@@ -293,7 +293,20 @@
         const activeClasses = { 'is-active': this.visible }
         vnode.data.class = [vnode.data.class, activeClasses]
 
-        return [vnode, menuElm]
+        // vnode.children = vnode.children || []
+        // if (menuElm) {
+        //   vnode.children.push(menuElm)
+        // }
+
+        // return vnode
+       const dropdownMenuVNode = menuElm ? menuElm : null;
+
+       return (
+          <template>
+             {vnode}   
+            {dropdownMenuVNode}  
+        </template>
+        );
       } 
       
       return (
