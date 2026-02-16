@@ -101,8 +101,8 @@
          });
 
          instance.$slots.default = menuVNode.componentOptions.children;
-         instance._events = this._events;
-  
+         instance.$on('menu-item-click', this.handleMenuItemClick);
+         
          instance.$mount();   
         
         const { staticClass, attrs } = menuVNode.data;
