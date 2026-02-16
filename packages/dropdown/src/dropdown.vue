@@ -100,9 +100,8 @@
           context: this.$vnode.context,
          });
 
-         instance.$slots.default = menuVNode.componentOptions.children;
-         instance.$on('menu-item-click', this.handleMenuItemClick);
-         
+          instance.$slots.default = menuVNode.componentOptions.children;
+          
          instance.$mount();   
         
         const { staticClass, attrs } = menuVNode.data;
@@ -110,6 +109,8 @@
         if (attrs)  Object.keys(attrs).forEach(key => instance.$el.setAttribute(key, attrs[key]));
        
         this.popperElm = instance.$el;
+        
+        instance.$on('menu-item-click', this.handleMenuItemClick);
         }
 
       this.$on('menu-item-click', this.handleMenuItemClick);
