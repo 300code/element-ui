@@ -101,6 +101,7 @@
          });
 
          instance.$slots.default = menuVNode.componentOptions.children;
+         instance._events = this._events;
   
          instance.$mount();   
         
