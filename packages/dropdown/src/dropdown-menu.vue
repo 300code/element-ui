@@ -39,6 +39,7 @@
         if (this.showPopper) this.updatePopper();
       });
       this.$on('visible', val => {
+        console.log('valvalval', val)
         this.showPopper = val;
       });
     },

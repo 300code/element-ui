@@ -38,6 +38,10 @@
       },
       splitButton: Boolean,
       raw: Boolean,
+      keepParentOpen: {
+    type: Boolean,
+    default: false
+  },
       hideOnClick: {
         type: Boolean,
         default: true
@@ -76,7 +80,8 @@
         menuItemsArray: null,
         dropdownElm: null,
         focusing: false,
-        listId: `dropdown-menu-${generateId()}`
+        listId: `dropdown-menu-${generateId()}`,
+        closeLocked: false, // 🚨 NEW: The lock flag
       };
     },
 
@@ -87,38 +92,51 @@
     },
 
     mounted() {
-      if (this.raw && this.$slots.dropdown) {
-        const menuVNode = this.$slots.dropdown[0];
-        const MenuCtor = menuVNode.componentOptions.Ctor;
+       if (this.raw && this.$slots.dropdown) {
+      //   const menuVNode = this.$slots.dropdown[0];
+      //   const MenuCtor = menuVNode.componentOptions.Ctor;
         
         // We manually create the menu. 
         // 'parent: this' makes the 'inject: [dropdown]' work!
        // 1. Create the instance WITHOUT mounting yet
-        const instance = new MenuCtor({
-          propsData: menuVNode.componentOptions.propsData,
-          parent: this,
-          context: this.$vnode.context,
-         });
+        // const instance = new MenuCtor({
+        //   propsData: menuVNode.componentOptions.propsData,
+        //   parent: this,
+        //   context: this.$vnode.context,
+        //  });
 
-          instance.$slots.default = menuVNode.componentOptions.children;
+        //   instance.$slots.default = menuVNode.componentOptions.children;
           
-         instance.$mount();   
+        //  instance.$mount();   
         
-        const { staticClass, attrs } = menuVNode.data;
-        if (staticClass) instance.$el.className += ` ${staticClass}`;
-        if (attrs)  Object.keys(attrs).forEach(key => instance.$el.setAttribute(key, attrs[key]));
+        // const { staticClass, attrs } = menuVNode.data;
+        // if (staticClass) instance.$el.className += ` ${staticClass}`;
+        // if (attrs)  Object.keys(attrs).forEach(key => instance.$el.setAttribute(key, attrs[key]));
        
-        this.popperElm = instance.$el;
-        
-        instance.$on('menu-item-click', this.handleMenuItemClick);
+        // this.popperElm = instance.$el;
+
+        // instance.$on('menu-item-click', this.handleMenuItemClick);
         }
 
       this.$on('menu-item-click', this.handleMenuItemClick);
+
+      // 🚨 Listen for the broadcast from the parent
+  this.$on('force-hide', () => {
+    this.visible = false;
+  });
     },
 
     watch: {
       visible(val) {
+        console.log('broadcastbroadcast', val)
         this.broadcast('ElDropdownMenu', 'visible', val);
+
+if (val === false) {
+      this.broadcast('ElDropdown', 'force-hide');
+    }
+
+
+
         this.$emit('visible-change', val);
 
         if (this.$el) {
@@ -154,15 +172,40 @@
         }, this.trigger === 'click' ? 0 : this.showTimeout);
       },
       hide() {
-        if (this.disabled) return;
+         if (this.disabled) return;
+// 🚨 If someone (a child) locked the menu, we REFUSE to hide.
+  if (this.closeLocked) {
+    console.log('Main menu is LOCKED - staying open for status change');
+    return;
+  }
+
+  const target = event && event.target;
+    if (target) {
+        const isPopup = target.closest('.el-dialog__wrapper') || 
+                        target.closest('.el-message-box__wrapper') || 
+                        target.closest('.v-modal'); // The dark backdrop
+        
+        if (isPopup) {
+            console.log('Moscow Guard: Popup detected, keeping menu open');
+            return;
+        }
+    }
+
         this.removeTabindex();
         if (this.tabindex >= 0) {
           this.resetTabindex(this.triggerElm);
         }
         clearTimeout(this.timeout);
         this.timeout = setTimeout(() => {
+          if (this.closeLocked) return;
           this.visible = false;
+                          console.log('setTimeout',  this.visible)
+
         }, this.trigger === 'click' ? 0 : this.hideTimeout);
+
+
+                console.log('ffffffff',  this.visible)
+
       },
       handleClick() {
         if (this.disabled) return;
@@ -268,9 +311,34 @@
         }
       },
       handleMenuItemClick(command, instance) {
+// If the clicked item's dropdown has keepParentOpen = true
+  if (instance && instance.dropdown && instance.dropdown.keepParentOpen) {
+    
+    // 1. Lock the parent so Clickoutside can't kill it
+    this.closeLocked = true;
+
+
+
+    // 🚨 THE FIX: If the child (Status Menu) has hideOnClick, close ONLY the child
+        if (instance.dropdown && instance.dropdown.hideOnClick) {
+            instance.dropdown.visible = false;
+        }
+    
+    // 2. Emit the command for your status change logic
+    this.$emit('command', command, instance);
+    
+    // 3. Unlock after a short delay so the menu works normally again later
+    setTimeout(() => {
+      this.closeLocked = false;
+    }, 300); 
+
+    return; // Don't set this.visible = false
+  }
         if (this.hideOnClick) {
           this.visible = false;
         }
+                console.log('reciv handleMenuItemClick',   this.visible )
+
         this.$emit('command', command, instance);
       },
       triggerElmFocus() {
@@ -285,7 +353,7 @@
         this.initAria();
       }
     },
-
+ 
     render(h) {
       let { hide, splitButton, type, dropdownSize, disabled, raw } = this;
 
@@ -314,20 +382,87 @@
         }
       }
       const menuElm = disabled ? null : this.$slots.dropdown;  
-      
-      if (this.raw) {
-        const vnode = triggerElm[0]
-        vnode.data = vnode.data || {}
-        vnode.data.directives = vnode.data.directives || []
-        // vnode.data.directives.push({ name: 'clickoutside', value: hide })
-        vnode.data.directives = [{ name: 'clickoutside', rawName: 'v-clickoutside', value: hide, expression: 'hide', def: Clickoutside}];
-        vnode.data.attrs = { ...vnode.data.attrs, 'aria-disabled': disabled, role: 'button' }
-        
-        const activeClasses = { 'is-active': this.visible }
-        vnode.data.class = [vnode.data.class, activeClasses] 
+ if (this.raw && this.$slots.dropdown) {
+  const vnode = triggerElm[0];
+  vnode.data = vnode.data || {};
 
-       return vnode 
-      } 
+  // attrs & class
+  vnode.data.attrs = { ...vnode.data.attrs, 'aria-disabled': disabled, role: 'button' };
+  vnode.data.class = [vnode.data.class, { 'is-active': this.visible }];
+
+  // hooks
+  vnode.data.hook = vnode.data.hook || {};
+  const oldInsert = vnode.data.hook.insert;
+
+ vnode.data.hook.insert = (vnodeElm) => {
+  const triggerEl = vnodeElm.elm;
+  const menuVNode = this.$slots.dropdown[0];
+
+  if (menuVNode && menuVNode.componentOptions) {
+    const MenuCtor = menuVNode.componentOptions.Ctor;
+    const menuInstance = new MenuCtor({
+      propsData: menuVNode.componentOptions.propsData,
+      parent: this
+    });
+    
+    menuInstance.$slots.default = menuVNode.componentOptions.children || [];
+    menuInstance.$mount();
+
+    document.body.appendChild(menuInstance.$el);
+    
+    // 1️⃣ Link the element so Clickoutside can find it
+    this.popperElm = menuInstance.$el;
+    
+    // 2️⃣ IMPORTANT: Clickoutside looks at vnode.context.popperElm
+    // We must ensure the context of the vnode is THIS component instance
+    vnodeElm.context = this; 
+
+
+    // --- 🚨 THE NESTED FIX 🚨 ---
+    // If THIS dropdown has a parent dropdown (Mitchell Admin), 
+    // we must tell the parent that OUR menu is "inside" its boundaries.
+    if (this.dropdown && this.dropdown.popperElm) {
+      // We create a reference so Clickoutside on the Main menu doesn't trigger
+      // We add the nested menu element to the parent's popperElm context
+      const parentPopper = this.dropdown.popperElm;
+      
+      // We manually ensure Clickoutside sees this click as "internal"
+      // by making the nested menu a child of the main menu in the DOM 
+      // OR by adding it to a whitelist. Since you use raw, appending works best:
+      parentPopper.appendChild(menuInstance.$el);
+    }
+
+
+
+    // 3️⃣ Bind Clickoutside to trigger
+    Clickoutside.bind(triggerEl, {
+      value: this.hide.bind(this),
+      expression: 'hide'
+    }, vnodeElm);
+
+    // 4️⃣ Sync the visibility once to start
+    menuInstance.$emit('visible', this.visible);
+
+    // 5️⃣ Manual listener for the Menu items to respect hideOnClick
+    menuInstance.$on('menu-item-click', (command, instance) => {
+      this.handleMenuItemClick(command, instance);
+    });
+
+    this.initDomOperation();
+  }
+};
+
+
+
+
+  vnode.data.hook.destroy = (vnodeElm) => {
+    Clickoutside.unbind(vnodeElm.elm);
+  };
+
+  return vnode;
+}
+
+
       
       return (
         <div class="el-dropdown" v-clickoutside={hide} aria-disabled={disabled}>
